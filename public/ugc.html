@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="docs/netease.png" />
   <title>云小编任务中心 - 网易云音乐 API Enhanced</title>
   <style>
     * {
@@ -404,6 +406,8 @@
       <div class="quick-fill">
         <span onclick="loadLocalCookie()">读取本地 Cookie</span>
         <span onclick="clearCookie()">清除 Cookie</span>
+        <span onclick="saveCookie()">保存 Cookie</span>
+        <span onclick="loadAll()">一键载入</span>
       </div>
     </div>
 
@@ -413,7 +417,7 @@
         <button class="btn-sm" id="userGet">获取用户详情</button>
       </div>
       <div class="info-card" id="user">
-        <img alt="头像" class="avatar" id="userAvatar" />
+        <img src="docs/netease.png" alt="头像" class="avatar" id="userAvatar" />
         <span class="info-text" id="userName">未登录</span>
         <button class="btn-sm green" id="userSign" disabled>签到</button>
       </div>
@@ -462,7 +466,6 @@
     </div>
   </div>
 
-  <script src="https://fastly.jsdelivr.net/npm/axios@0.26.1/dist/axios.min.js"></script>
   <script>
     (function () {
       var k_cookie = 'ncm_cookie';
@@ -495,6 +498,12 @@
         localStorage.removeItem(k_cookie);
         showResult('已清除本地 Cookie', 'info');
       };
+
+      window.saveCookie = function () {
+        var ck = getCookie()
+        if (ck) localStorage.setItem(k_cookie, ck)
+        showResult('已保存本地 Cookie', 'info');
+      }
 
       /* ---- Result ---- */
       function hideResult() {
@@ -637,8 +646,15 @@
 
           if (d.auditCount >= 50) {
             request('rep/ugc/activity/collect', { activityId: '5001' }, function (res) {
-              showResult('积分领取' + (res.data ? '成功，可以兑换会员了！' : '失败'), res.data ? 'success' : 'error');
+              var d = res.data;
+              showResult('积分领取' + (d ? '成功，可以兑换会员了！' : '失败'), d ? 'success' : 'error');
+              // 刷新任务状态
+              if (d) {
+                vipGet.click();
+                taskGetBtn.click();
+              }
             });
+            songAudio.pause()
             return;
           }
 
@@ -686,7 +702,7 @@
       }
 
       /// 一键载入 ///
-      document.getElementById('loadall').onclick = function () {
+      window.loadAll = function () {
         userGet.click();
         vipGet.click();
         taskGetBtn.click();

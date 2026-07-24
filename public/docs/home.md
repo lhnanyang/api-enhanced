@@ -5727,6 +5727,36 @@ let data = encodeURIComponent(
 
 **调用例子 :** `/device/kickoff?key=00ALDFGEXXXXXXXXXXXXXXXXX&captcha=1234`
 
+### 云小编 - 剩余抽奖次数
+
+说明: 登录后调用此接口, 获取今日云小编抽奖剩余次数
+
+**可选参数:**
+
+`activityId`: 活动 ID, 默认 `6501202`
+
+**接口地址:** `/middle/play/lottery/remain/chance`
+
+**调用例子:** `/middle/play/lottery/remain/chance?activityId=6501202`
+
+### 云小编 - 每日抽奖
+
+说明: 登录后调用此接口, 消耗 200 积分进行抽奖, 每日最多抽 3 次
+
+> 注意: 抽奖失败也消耗每日次数, 请先调用 `/rep/ugc/user/get` 查询可用积分
+
+**可选参数:**
+
+`activityId`: 活动 ID, 默认 `6501202`
+
+`drawCount`: 未知, 默认 `1`
+
+`checkToken`: 易盾反作弊 Token, 默认自动获取
+
+**接口地址:** `/middle/play/do/lottery`
+
+**调用例子:** `/middle/play/do/lottery?activityId=6501202&drawCount=1`
+
 ## 离线访问此文档
 
 此文档同时也是 Progressive Web Apps(PWA), 加入了 serviceWorker, 可离线访问
